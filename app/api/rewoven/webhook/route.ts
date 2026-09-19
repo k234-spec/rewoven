@@ -1,0 +1,5 @@
+﻿import {NextResponse} from 'next/server';
+import {verifySignature,confirmPayment} from '@/lib/rewoven/payments';
+import {db} from '@/lib/rewoven/server';
+export const runtime='nodejs';
+export async function POST(req:Request){const secret=process.env.RAZORPAY_WEBHOOK_SECRET;if(!secret)return NextResponse.json({error:'Webhook not configured'},{status:503});const raw=await req.text();if(!verifySignature(raw,req.headers.get('x-razorpay-signature')||'',secret))return NextResponse.json({error:'Invalid signature'},{status:400});try{const body=JSON.parse(raw);const p=body.payload?.payment?.entity;if(body.event==='payment.captured'&&p?.currency==='INR'&&p?.status==='captured')confirmPayment(p.order_id,p.id,p.amount,req.headers.get('x-razorpay-event-id')||p.id);if(body.event==='payment.failed'&&p?.order_id)db().prepare("UPDATE orders SET status='FAILED' WHERE gateway_id=? AND status='PENDING'").run(p.order_id);return NextResponse.json({received:true})}catch{return NextResponse.json({error:'Unable to reconcile payment'},{status:400})}}

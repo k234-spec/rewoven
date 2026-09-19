@@ -1,0 +1,210 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* ==========================================================================
+     Madamcutie Brand Color Tokens
+     ========================================================================== */
+  --color-noir: #111111; /* Primary text, buttons, footer */
+  --color-ivory: #faf8f5; /* Editorial section backgrounds */
+  --color-gold: #d4af37; /* ACCENT ONLY: logo, single divider, CTA hover */
+  --color-pink-accent: #ff007f; /* Sale badge text + wishlist active icon ONLY */
+  --color-emerald: #28a745; /* In-stock, free shipping, "Added to bag" success */
+  --color-hairline: #e8e3db; /* Structural borders & editorial dividers */
+  --color-white: #ffffff;
+
+  /* ==========================================================================
+     Section Spacing Token (Generous MM-style editorial gap)
+     ========================================================================== */
+  --section-gap-xl: clamp(64px, 10vw, 140px);
+
+  /* ==========================================================================
+     Fluid Typography Scale
+     ========================================================================== */
+  --font-size-hero: clamp(36px, 5vw, 64px);
+  --font-size-h1: clamp(28px, 4vw, 44px);
+  --font-size-h2: clamp(22px, 3vw, 32px);
+  --font-size-h3: clamp(18px, 2.5vw, 24px);
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+}
+
+/* ==========================================================================
+   Continuous Marquee Animation for Announcement Bar
+   ========================================================================== */
+@keyframes marquee {
+  0% {
+    transform: translate3d(0%, 0, 0);
+  }
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.animate-marquee {
+  display: flex;
+  width: max-content;
+  animation: marquee 28s linear infinite;
+}
+
+.animate-marquee:hover {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-marquee {
+    animation: none;
+    width: 100%;
+    overflow-x: auto;
+    justify-content: center;
+  }
+}
+
+/* ==========================================================================
+   CSS-Only Hero 3-Image Auto-Crossfade (15s total cycle, 5s per slide)
+   ========================================================================== */
+.hero-crossfade-1 {
+  animation: heroCrossfade3_1 15s ease-in-out infinite;
+}
+
+.hero-crossfade-2 {
+  animation: heroCrossfade3_2 15s ease-in-out infinite;
+}
+
+.hero-crossfade-3 {
+  animation: heroCrossfade3_3 15s ease-in-out infinite;
+}
+
+@keyframes heroCrossfade3_1 {
+  0%,
+  26.6% {
+    opacity: 1;
+  }
+  34.6%,
+  92% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes heroCrossfade3_2 {
+  0%,
+  25.3% {
+    opacity: 0;
+  }
+  33.3%,
+  60% {
+    opacity: 1;
+  }
+  68%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes heroCrossfade3_3 {
+  0%,
+  58.6% {
+    opacity: 0;
+  }
+  66.6%,
+  93.3% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-crossfade-1 {
+    animation: none !important;
+    opacity: 1 !important;
+  }
+  .hero-crossfade-2,
+  .hero-crossfade-3 {
+    animation: none !important;
+    opacity: 0 !important;
+  }
+}
+
+/* ==========================================================================
+   MC Monogram Couture Intro Loading Animation (~2s Total Duration)
+   ========================================================================== */
+@keyframes mcLogoGrow {
+  0% {
+    opacity: 0;
+    transform: scale(0.55);
+    filter: drop-shadow(0 0 0px rgba(212, 175, 55, 0));
+  }
+  35% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1.08);
+    filter: drop-shadow(0 0 28px rgba(212, 175, 55, 0.45));
+  }
+}
+
+.intro-mc-monogram {
+  animation: mcLogoGrow 1.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  transform-origin: center center;
+  will-change: transform, opacity;
+}
+
+@keyframes mcWordmarkFadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.intro-mc-wordmark {
+  opacity: 0;
+  animation: mcWordmarkFadeIn 600ms cubic-bezier(0.16, 1, 0.3, 1) 400ms forwards;
+}
+
+@keyframes mcLineDraw {
+  0% {
+    width: 0%;
+  }
+  100% {
+    width: 100%;
+  }
+}
+
+.intro-mc-line {
+  width: 0%;
+  animation: mcLineDraw 500ms cubic-bezier(0.16, 1, 0.3, 1) 700ms forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .intro-mc-monogram {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: scale(1) !important;
+    filter: none !important;
+  }
+  .intro-mc-wordmark {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  .intro-mc-line {
+    animation: none !important;
+    width: 100% !important;
+    transform: none !important;
+  }
+}

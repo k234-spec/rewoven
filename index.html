@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Madamcutie | Luxury Fashion &amp; Apparel eCommerce</title>
+    <meta name="description" content="Discover premium luxury fashion, elegant dresses, refined tops, outerwear, and accessories at Madamcutie. Experience couture design and slow-fashion sustainability.">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+    <!-- Announcement Bar -->
+    <div class="announcement-bar">
+        <div class="announcement-bar-content">
+            ✦ Free complimentary shipping on orders over ₹2250 ✦ Use code: MADAM15 for 15% off your first luxury purchase ✦ New Summer Edit now live! ✦
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="container nav-container">
+            <div class="logo-wrapper">
+                <img src="/assets/images/logo.jpg" alt="Madamcutie Logo" class="logo-img">
+                <a href="index.html" class="logo-text" style="background: linear-gradient(45deg, #d4af37, #f3e5ab, #b8860b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-shadow: 0px 2px 4px rgba(0,0,0,0.1); font-weight: 800; font-family: var(--font-heading); font-size: clamp(1.5rem, 4vw, 2.2rem); letter-spacing: 2px;">Madamcutie</a>
+            </div>
+            
+            <nav class="nav-links">
+                <a href="index.html" class="active">Home</a>
+                <a href="shop.html">Shop</a>
+                <a href="about.html">Our Story</a>
+                <a href="https://wa.me/919911852113" target="_blank">For Wholesale</a>
+                <a href="creators.html">For Creators</a>
+                <a href="contact.html">Contact</a>
+            </nav>
+
+            <div class="header-actions">
+                <button class="action-btn" id="search-trigger" title="Search" onclick="document.getElementById('search-bar-container').style.display = document.getElementById('search-bar-container').style.display === 'none' ? 'block' : 'none';"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle;"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></button>
+                <a href="cart.html" class="action-btn" title="Shopping Bag">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle;"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+                    <span class="cart-count" style="display: none;">0</span>
+                </a>
+                <button class="mobile-menu-toggle action-btn" aria-label="Toggle Menu" onclick="toggleMobileNav()">☰</button>
+            </div>
+        </div>
+        <div class="search-bar-container" id="search-bar-container" style="display: none; position: absolute; top: 100%; left: 0; width: 100%; background: #fff; padding: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); z-index: 100;">
+            <form action="shop.html" method="GET" style="display: flex; max-width: 800px; margin: 0 auto; gap: 10px;">
+                <input type="text" name="q" placeholder="Search for products, categories..." style="flex: 1; padding: 12px 20px; border: 1px solid #ddd; border-radius: 4px; font-size: 1rem;">
+                <button type="submit" class="btn btn-primary" style="padding: 12px 24px;">Search</button>
+            </form>
+        </div>
+    </header>
+
+    <!-- Mobile Nav Drawer -->
+    <div class="mobile-nav-drawer" id="mobile-nav">
+        <button class="drawer-close-btn" onclick="toggleMobileNav()">✕</button>
+        <nav class="mobile-nav-links">
+            <a href="index.html" class="active">Home</a>
+            <a href="shop.html">Shop</a>
+            <a href="about.html">Our Story</a>
+            <a href="https://wa.me/919911852113" target="_blank">For Wholesale</a>
+            <a href="creators.html">For Creators</a>
+            <a href="contact.html">Contact</a>
+        </nav>
+    </div>
+    <div class="mobile-nav-drawer-overlay" id="mobile-nav-overlay" onclick="toggleMobileNav()"></div>
+
+    <!-- Hero Section -->
+    <section class="hero-slider" style="margin-top: -1px;">
+        <div class="hero-slide active">
+            <!-- Hero Rotating Background Images (CSS-only auto-crossfade, 5s sequence) -->
+            <div class="hero-bg-img hero-bg-1" style="background-image: url('images/hero/hero-1.webp');" role="img" aria-label="Madamcutie Luxury Fashion - Royal Emerald Handcrafted Couture"></div>
+            <div class="hero-bg-img hero-bg-2" style="background-image: url('images/hero/hero-2.webp');" role="img" aria-label="Madamcutie Luxury Fashion - Midnight Blue Velvet Corset"></div>
+            <div class="hero-bg-img hero-bg-3" style="background-image: url('images/hero/hero-3.webp');" role="img" aria-label="Madamcutie Luxury Fashion - Ruby Red Zardozi Bridal"></div>
+            <div class="hero-overlay"></div>
+            <div class="container" style="position: relative; z-index: 2;">
+                <div class="hero-content">
+                    <p class="hero-subtitle">Premium Luxury Fashion</p>
+                    <h1 class="hero-title">Effortless Style for<br>Modern Queens</h1>
+                    <p class="hero-description">Discover our curated collection of luxury apparel designed to empower and inspire. Elegance redefined for the contemporary woman.</p>
+                    <div class="hero-btn-wrap" style="display: flex; gap: 15px; flex-wrap: wrap;">
+                        <a href="shop.html" class="btn btn-primary">Shop Now</a>
+                        <a href="about.html" class="btn btn-secondary">Our Story</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Highlight Strip -->
+    <section class="section" style="background: var(--color-bg-light); color: #111; padding: 30px 0; border-top: 1px solid var(--color-border); border-bottom: 1px solid var(--color-border);">
+        <div class="container">
+            <div class="grid grid-responsive-4-2-1 text-center">
+                <div class="highlight-item d-flex align-center justify-center" style="gap: 12px; padding: 10px;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--color-gold-base)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>
+                    <h4 style="text-transform: uppercase; letter-spacing: 1px; font-size: 0.85rem; font-weight: 700; margin: 0; color: #111;">Premium Fabrics</h4>
+                </div>
+                <div class="highlight-item d-flex align-center justify-center" style="gap: 12px; padding: 10px;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--color-gold-base)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
+                    <h4 style="text-transform: uppercase; letter-spacing: 1px; font-size: 0.85rem; font-weight: 700; margin: 0; color: #111;">Pan-India Shipping</h4>
+                </div>
+                <div class="highlight-item d-flex align-center justify-center" style="gap: 12px; padding: 10px;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--color-gold-base)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                    <h4 style="text-transform: uppercase; letter-spacing: 1px; font-size: 0.85rem; font-weight: 700; margin: 0; color: #111;">Easy Returns</h4>
+                </div>
+                <div class="highlight-item d-flex align-center justify-center" style="gap: 12px; padding: 10px;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--color-gold-base)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                    <h4 style="text-transform: uppercase; letter-spacing: 1px; font-size: 0.85rem; font-weight: 700; margin: 0; color: #111;">Secure Payments</h4>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Collection Grid -->
+    <section class="section" style="background-color: var(--color-secondary);">
+        <div class="container">
+            <div class="d-flex justify-between align-center" style="margin-bottom: 40px; flex-wrap: wrap; gap: 20px;">
+                <div>
+                    <h2 style="font-size: clamp(2rem, 5vw, 3rem); font-family: var(--font-heading); font-weight: 500;">Featured Looks</h2>
+                    <p style="color: var(--color-text-light); margin-top: 5px;">Discover our most loved pieces</p>
+                </div>
+            </div>
+            
+            <div class="grid grid-responsive-4-2-1" id="madam-grid">
+                <!-- Pre-rendered with real prices from products.js (₹1499) -->
+                <div class="product-card" id="card-p1">
+                    <div class="product-image-wrapper">
+                        <a href="product.html?id=p1">
+                            <img src="/assets/images/madam/Vibrant handcrafted mirror-work ethnic corset blouse.PNG" alt="Vibrant handcrafted mirror-work ethnic corset blouse" class="product-image" loading="lazy">
+                        </a>
+                        <button class="product-quick-add" onclick="event.preventDefault(); addToCart('p1', 'Vibrant handcrafted mirror-work ethnic corset blouse', 1499, '/assets/images/madam/Vibrant handcrafted mirror-work ethnic corset blouse.PNG')">Quick Add</button>
+                    </div>
+                    <div class="product-info">
+                        <span class="product-cat">Corset Blouse</span>
+                        <h3 class="product-title"><a href="product.html?id=p1">Vibrant handcrafted mirror-work ethnic corset blouse</a></h3>
+                        <div class="product-rating" style="color: var(--color-gold-base);">
+                            <span>★★★★★</span>
+                            <span class="product-rating-count" style="color: var(--color-text-secondary);">(48)</span>
+                        </div>
+                        <span class="product-price">₹1499</span>
+                    </div>
+                </div>
+                <div class="product-card" id="card-p2">
+                    <div class="product-image-wrapper">
+                        <a href="product.html?id=p2">
+                            <img src="/assets/images/madam/IMG_0029.PNG" alt="Vibrant handcrafted mirror-work ethnic corset blouse Green" class="product-image" loading="lazy">
+                        </a>
+                        <button class="product-quick-add" onclick="event.preventDefault(); addToCart('p2', 'Vibrant handcrafted mirror-work ethnic corset blouse Green', 1499, '/assets/images/madam/IMG_0029.PNG')">Quick Add</button>
+                    </div>
+                    <div class="product-info">
+                        <span class="product-cat">Corset Blouse</span>
+                        <h3 class="product-title"><a href="product.html?id=p2">Vibrant handcrafted mirror-work ethnic corset blouse Green</a></h3>
+                        <div class="product-rating" style="color: var(--color-gold-base);">
+                            <span>★★★★★</span>
+                            <span class="product-rating-count" style="color: var(--color-text-secondary);">(36)</span>
+                        </div>
+                        <span class="product-price">₹1499</span>
+                    </div>
+                </div>
+                <div class="product-card" id="card-p3">
+                    <div class="product-image-wrapper">
+                        <a href="product.html?id=p3">
+                            <img src="/assets/images/madam/IMG_0047.PNG" alt="Vibrant handcrafted mirror-work ethnic corset blouse Dark Green" class="product-image" loading="lazy">
+                        </a>
+                        <button class="product-quick-add" onclick="event.preventDefault(); addToCart('p3', 'Vibrant handcrafted mirror-work ethnic corset blouse Dark Green', 1499, '/assets/images/madam/IMG_0047.PNG')">Quick Add</button>
+                    </div>
+                    <div class="product-info">
+                        <span class="product-cat">Corset Blouse</span>
+                        <h3 class="product-title"><a href="product.html?id=p3">Vibrant handcrafted mirror-work ethnic corset blouse Dark Green</a></h3>
+                        <div class="product-rating" style="color: var(--color-gold-base);">
+                            <span>★★★★★</span>
+                            <span class="product-rating-count" style="color: var(--color-text-secondary);">(52)</span>
+                        </div>
+                        <span class="product-price">₹1499</span>
+                    </div>
+                </div>
+                <div class="product-card" id="card-p4">
+                    <div class="product-image-wrapper">
+                        <a href="product.html?id=p4">
+                            <img src="/assets/images/madam/Vibrant handcrafted mirror-work ethnic corset blouse Blue.PNG" alt="Vibrant handcrafted mirror work ethnic corset blouse" class="product-image" loading="lazy">
+                        </a>
+                        <button class="product-quick-add" onclick="event.preventDefault(); addToCart('p4', 'Vibrant handcrafted mirror work ethnic corset blouse', 1499, '/assets/images/madam/Vibrant handcrafted mirror-work ethnic corset blouse Blue.PNG')">Quick Add</button>
+                    </div>
+                    <div class="product-info">
+                        <span class="product-cat">Corset Blouse</span>
+                        <h3 class="product-title"><a href="product.html?id=p4">Vibrant handcrafted mirror work ethnic corset blouse</a></h3>
+                        <div class="product-rating" style="color: var(--color-gold-base);">
+                            <span>★★★★★</span>
+                            <span class="product-rating-count" style="color: var(--color-text-secondary);">(29)</span>
+                        </div>
+                        <span class="product-price">₹1499</span>
+                    </div>
+                </div>
+                <div class="product-card" id="card-p5">
+                    <div class="product-image-wrapper">
+                        <a href="product.html?id=p5">
+                            <img src="/assets/images/madam/Sleeveless crop top blouse with vibrant traditional thread embroidery and mirror work detailing.PNG" alt="Sleeveless crop top blouse with vibrant traditional thread embroidery" class="product-image" loading="lazy">
+                        </a>
+                        <button class="product-quick-add" onclick="event.preventDefault(); addToCart('p5', 'Sleeveless crop top blouse with vibrant traditional thread embroidery and mirror work detailing', 1499, '/assets/images/madam/Sleeveless crop top blouse with vibrant traditional thread embroidery and mirror work detailing.PNG')">Quick Add</button>
+                    </div>
+                    <div class="product-info">
+                        <span class="product-cat">Designer Blouse</span>
+                        <h3 class="product-title"><a href="product.html?id=p5">Sleeveless crop top blouse with vibrant thread embroidery</a></h3>
+                        <div class="product-rating" style="color: var(--color-gold-base);">
+                            <span>★★★★★</span>
+                            <span class="product-rating-count" style="color: var(--color-text-secondary);">(41)</span>
+                        </div>
+                        <span class="product-price">₹1499</span>
+                    </div>
+                </div>
+                <div class="product-card" id="card-p6">
+                    <div class="product-image-wrapper">
+                        <a href="product.html?id=p6">
+                            <img src="/assets/images/madam/IMG_0019.PNG" alt="Sleeveless crop top blouse with vibrant traditional thread embroidery Blue" class="product-image" loading="lazy">
+                        </a>
+                        <button class="product-quick-add" onclick="event.preventDefault(); addToCart('p6', 'Sleeveless crop top blouse with vibrant traditional thread embroidery and mirror work detailing Blue', 1499, '/assets/images/madam/IMG_0019.PNG')">Quick Add</button>
+                    </div>
+                    <div class="product-info">
+                        <span class="product-cat">Designer Blouse</span>
+                        <h3 class="product-title"><a href="product.html?id=p6">Sleeveless crop top blouse Blue</a></h3>
+                        <div class="product-rating" style="color: var(--color-gold-base);">
+                            <span>★★★★★</span>
+                            <span class="product-rating-count" style="color: var(--color-text-secondary);">(33)</span>
+                        </div>
+                        <span class="product-price">₹1499</span>
+                    </div>
+                </div>
+                <div class="product-card" id="card-p7">
+                    <div class="product-image-wrapper">
+                        <a href="product.html?id=p7">
+                            <img src="/assets/images/madam/IMG_0042.PNG" alt="Sleeveless crop top blouse with vibrant traditional thread embroidery White" class="product-image" loading="lazy">
+                        </a>
+                        <button class="product-quick-add" onclick="event.preventDefault(); addToCart('p7', 'Sleeveless crop top blouse with vibrant traditional thread embroidery and mirror work detailing White', 1499, '/assets/images/madam/IMG_0042.PNG')">Quick Add</button>
+                    </div>
+                    <div class="product-info">
+                        <span class="product-cat">Designer Blouse</span>
+                        <h3 class="product-title"><a href="product.html?id=p7">Sleeveless crop top blouse White</a></h3>
+                        <div class="product-rating" style="color: var(--color-gold-base);">
+                            <span>★★★★★</span>
+                            <span class="product-rating-count" style="color: var(--color-text-secondary);">(57)</span>
+                        </div>
+                        <span class="product-price">₹1499</span>
+                    </div>
+                </div>
+                <div class="product-card" id="card-p8">
+                    <div class="product-image-wrapper">
+                        <a href="product.html?id=p8">
+                            <img src="/assets/images/madam/IMG_0036.PNG" alt="Sleeveless crop top blouse with vibrant traditional thread embroidery Black" class="product-image" loading="lazy">
+                        </a>
+                        <button class="product-quick-add" onclick="event.preventDefault(); addToCart('p8', 'Sleeveless crop top blouse with vibrant traditional thread embroidery and mirror work detailing Black', 1499, '/assets/images/madam/IMG_0036.PNG')">Quick Add</button>
+                    </div>
+                    <div class="product-info">
+                        <span class="product-cat">Designer Blouse</span>
+                        <h3 class="product-title"><a href="product.html?id=p8">Sleeveless crop top blouse Black</a></h3>
+                        <div class="product-rating" style="color: var(--color-gold-base);">
+                            <span>★★★★★</span>
+                            <span class="product-rating-count" style="color: var(--color-text-secondary);">(44)</span>
+                        </div>
+                        <span class="product-price">₹1499</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center" style="margin-top: 50px;">
+                <a href="shop.html" class="btn btn-secondary" style="padding: 12px 30px;">View All Styles</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- The Madamcutie Process Section -->
+    <section class="section process-section" id="process-section">
+        <div class="container">
+            <div class="text-center" style="margin-bottom: clamp(36px, 6vw, 56px);">
+                <p style="color: var(--color-text-secondary); text-transform: uppercase; letter-spacing: 2px; font-size: 0.75rem; font-weight: 700; margin-bottom: 8px;">Couture Craftsmanship</p>
+                <h2 style="font-size: clamp(2rem, 4.5vw, 3rem); font-family: var(--font-heading); font-weight: 500; margin: 0 0 12px 0;">The Madamcutie Process</h2>
+                <div class="gold-divider"></div>
+            </div>
+
+            <div class="process-grid">
+                <!-- Step 1 -->
+                <article class="process-card">
+                    <div class="process-image-wrapper">
+                        <img src="/assets/images/process/fabric-mirror-sourcing.jpg" alt="Fabric and Mirror Sourcing — hand-selected raw silks and artisan cut mirrors" class="process-img" loading="lazy" onerror="this.style.opacity='0';">
+                        <div class="process-image-placeholder-fallback">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin-bottom: 6px; opacity: 0.6;"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+                            <span>Photo Placeholder</span>
+                        </div>
+                    </div>
+                    <div class="process-step-num">1</div>
+                    <h3 class="process-step-title">Fabric &amp; Mirror Sourcing</h3>
+                    <p class="process-step-desc">We ethically source hand-loomed raw silks, rich velvets, and authentic cut mirrors selected for clarity, weight, and enduring luster.</p>
+                </article>
+
+                <!-- Step 2 -->
+                <article class="process-card">
+                    <div class="process-image-wrapper">
+                        <img src="/assets/images/process/hand-embroidery.jpg" alt="Hand Embroidery — Chandni Chowk artisans stitching zardozi and mirror needlework" class="process-img" loading="lazy" onerror="this.style.opacity='0';">
+                        <div class="process-image-placeholder-fallback">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin-bottom: 6px; opacity: 0.6;"><circle cx="12" cy="12" r="10"></circle><path d="m4.93 4.93 4.24 4.24"></path><path d="m14.83 9.17 4.24-4.24"></path><path d="m14.83 14.83 4.24 4.24"></path><path d="m9.17 14.83-4.24 4.24"></path></svg>
+                            <span>Photo Placeholder</span>
+                        </div>
+                    </div>
+                    <div class="process-step-num">2</div>
+                    <h3 class="process-step-title">Hand Embroidery</h3>
+                    <p class="process-step-desc">Centuries of zardozi, pita, and delicate mirror needlework are hand-sewn by fourth-generation Chandni Chowk artisans in Old Delhi.</p>
+                </article>
+
+                <!-- Step 3 -->
+                <article class="process-card">
+                    <div class="process-image-wrapper">
+                        <img src="/assets/images/process/fit-stitching.jpg" alt="Fit & Stitching — boned corset sculpting and tailored silhouette construction" class="process-img" loading="lazy" onerror="this.style.opacity='0';">
+                        <div class="process-image-placeholder-fallback">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin-bottom: 6px; opacity: 0.6;"><path d="m21.64 3.64-1.28-1.28a1.21 1.21 0 0 0-1.72 0L2.36 18.64a1.21 1.21 0 0 0 0 1.72l1.28 1.28a1.2 1.2 0 0 0 1.72 0L21.64 5.36a1.2 1.2 0 0 0 0-1.72Z"></path><path d="m14 7 3 3"></path><path d="M5 6v4"></path><path d="M19 14v4"></path><path d="M10 2v2"></path><path d="M7 8H3"></path><path d="M21 16h-4"></path><path d="M11 3H9"></path></svg>
+                            <span>Photo Placeholder</span>
+                        </div>
+                    </div>
+                    <div class="process-step-num">3</div>
+                    <h3 class="process-step-title">Fit &amp; Stitching</h3>
+                    <p class="process-step-desc">Structured corsetry boning, tailored bust cups, and generous seam margins are meticulously stitched to sculpt and celebrate the female form.</p>
+                </article>
+
+                <!-- Step 4 -->
+                <article class="process-card">
+                    <div class="process-image-wrapper">
+                        <img src="/assets/images/process/quality-dispatch.jpg" alt="Quality Check & Dispatch — hand steaming, inspection, and luxury courier dispatch" class="process-img" loading="lazy" onerror="this.style.opacity='0';">
+                        <div class="process-image-placeholder-fallback">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin-bottom: 6px; opacity: 0.6;"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                            <span>Photo Placeholder</span>
+                        </div>
+                    </div>
+                    <div class="process-step-num">4</div>
+                    <h3 class="process-step-title">Quality Check &amp; Dispatch</h3>
+                    <p class="process-step-desc">Each garment undergoes rigorous tension testing, mirror inspection, and luxury steaming before being packaged in custom noir boxes for dispatch.</p>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <!-- Style Edits Row -->
+    <section class="section" style="background-color: var(--color-bg-light);">
+        <div class="container">
+            <h2 class="text-center" style="font-size: clamp(1.8rem, 4vw, 2.8rem); font-family: var(--font-heading); margin-bottom: 40px;">Style Edits</h2>
+            <div class="grid grid-responsive-3-2-1">
+                <a href="shop.html?edit=datenight" class="lookbook-tile" style="position: relative; height: clamp(300px, 50vw, 450px); overflow: hidden; border-radius: 2px; display: block;">
+                    <img src="/assets/images/madam/party_wear_1.jpg" alt="Shimmer Party Top" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.8s ease;">
+                    <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.1) 100%); display: flex; align-items: flex-end; padding: 20px;">
+                        <div>
+                            <p style="color: var(--color-gold-base); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 5px; font-weight: 600;">Curated</p>
+                            <h3 style="color: white; font-size: clamp(1.2rem, 3vw, 1.8rem); font-family: var(--font-heading); letter-spacing: 1px;">Shimmer Party Top</h3>
+                        </div>
+                    </div>
+                </a>
+                <a href="shop.html?edit=office" class="lookbook-tile" style="position: relative; height: clamp(300px, 50vw, 450px); overflow: hidden; border-radius: 2px; display: block;">
+                    <img src="/assets/images/madam/party_wear_2.jpg" alt="Black Chevron Sequin Top" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.8s ease;">
+                    <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.1) 100%); display: flex; align-items: flex-end; padding: 20px;">
+                        <div>
+                            <p style="color: var(--color-gold-base); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 5px; font-weight: 600;">Curated</p>
+                            <h3 style="color: white; font-size: clamp(1.2rem, 3vw, 1.8rem); font-family: var(--font-heading); letter-spacing: 1px;">Black Chevron Sequin Top</h3>
+                        </div>
+                    </div>
+                </a>
+                <a href="shop.html?edit=weekend" class="lookbook-tile" style="position: relative; height: clamp(300px, 50vw, 450px); overflow: hidden; border-radius: 2px; display: block;">
+                    <img src="/assets/images/madam/party_wear_3.jpg" alt="Glamour Evening Wear" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.8s ease;">
+                    <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.1) 100%); display: flex; align-items: flex-end; padding: 20px;">
+                        <div>
+                            <p style="color: var(--color-gold-base); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 5px; font-weight: 600;">Curated</p>
+                            <h3 style="color: white; font-size: clamp(1.2rem, 3vw, 1.8rem); font-family: var(--font-heading); letter-spacing: 1px;">Glamour Evening Wear</h3>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Brand Story Preview -->
+    <section class="section">
+        <div class="container">
+            <div class="grid grid-responsive-2-1 align-center" style="gap: clamp(20px, 5vw, 60px);">
+                <div style="position: relative;">
+                    <div class="hide-sm" style="position: absolute; top: -15px; left: -15px; width: 100%; height: 100%; border: 1px solid var(--color-gold-base); z-index: 0;"></div>
+                    <img src="/assets/images/madam/saini-18.jpg" alt="Madamcutie Model" style="width: 100%; height: auto; max-height: 600px; object-fit: cover; position: relative; z-index: 1; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
+                </div>
+                <div style="padding: 10px 0;">
+                    <p style="color: var(--color-gold-base); font-weight: 700; letter-spacing: 2px; text-transform: uppercase; font-size: 0.8rem; margin-bottom: 15px;">Our Heritage</p>
+                    <h2 style="font-size: clamp(2rem, 5vw, 3rem); font-family: var(--font-heading); margin-bottom: 25px; line-height: 1.2;">Empowering Everyday Queens</h2>
+                    <p style="font-size: clamp(0.95rem, 2vw, 1.1rem); color: var(--color-text-light); margin-bottom: 25px; line-height: 1.8;">
+                        Welcome to MadamCutie – where fashion meets confidence and elegance. Based in the vibrant heart of Chandni Chowk, we bring you thoughtfully curated women's apparel that blends timeless charm with modern trends.<br><br>At MadamCutie, we believe every woman deserves to feel beautiful, confident, and comfortable in what she wears. Our collections are designed to celebrate individuality, offering stylish outfits that suit every occasion.
+                    </p>
+                    <a href="about.html" class="btn btn-primary">Read Our Story</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Styled By Our Queens Section -->
+    <section class="section queens-section" id="queens-section">
+        <div class="container">
+            <div class="queens-header-wrap">
+                <div class="queens-title-group">
+                    <p style="color: var(--color-text-secondary); text-transform: uppercase; letter-spacing: 2px; font-size: 0.75rem; font-weight: 700; margin-bottom: 6px;">Community Spotlight</p>
+                    <h2>Styled By Our Queens</h2>
+                    <p class="queens-subtitle">Real women celebrating elegance, craftsmanship, and individuality in Madamcutie.</p>
+                </div>
+                <div class="queens-nav-controls">
+                    <button class="queen-nav-btn" onclick="scrollQueens(-1)" aria-label="Scroll Left">&#10094;</button>
+                    <button class="queen-nav-btn" onclick="scrollQueens(1)" aria-label="Scroll Right">&#10095;</button>
+                </div>
+            </div>
+
+            <div class="queens-carousel-container">
+                <div class="queens-track" id="queens-track">
+                    <!-- Queen Card 1 -->
+                    <div class="queen-card">
+                        <div class="queen-img-wrap">
+                            <img src="/assets/images/queens/queen-01.jpg" alt="Priya, Delhi styled in Madamcutie" class="queen-img" loading="lazy" onerror="this.style.opacity='0';">
+                            <div class="queen-placeholder-badge">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin-bottom: 4px; opacity: 0.6;"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
+                                <span>Priya</span>
+                            </div>
+                        </div>
+                        <div class="queen-info">
+                            <h4 class="queen-name">Priya, Delhi</h4>
+                            <span class="queen-tag">Mirror-Work Corset</span>
+                        </div>
+                    </div>
+
+                    <!-- Queen Card 2 -->
+                    <div class="queen-card">
+                        <div class="queen-img-wrap">
+                            <img src="/assets/images/queens/queen-02.jpg" alt="Ananya, Mumbai styled in Madamcutie" class="queen-img" loading="lazy" onerror="this.style.opacity='0';">
+                            <div class="queen-placeholder-badge">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin-bottom: 4px; opacity: 0.6;"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
+                                <span>Ananya</span>
+                            </div>
+                        </div>
+                        <div class="queen-info">
+                            <h4 class="queen-name">Ananya, Mumbai</h4>
+                            <span class="queen-tag">Zardozi V-Neck Blouse</span>
+                        </div>
+                    </div>
+
+                    <!-- Queen Card 3 -->
+                    <div class="queen-card">
+                        <div class="queen-img-wrap">
+                            <img src="/assets/images/queens/queen-03.jpg" alt="Meera, Bengaluru styled in Madamcutie" class="queen-img" loading="lazy" onerror="this.style.opacity='0';">
+                            <div class="queen-placeholder-badge">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin-bottom: 4px; opacity: 0.6;"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
+                                <span>Meera</span>
+                            </div>
+                        </div>
+                        <div class="queen-info">
+                            <h4 class="queen-name">Meera, Bengaluru</h4>
+                            <span class="queen-tag">Gold Shimmer Bustier</span>
+                        </div>
+                    </div>
+
+                    <!-- Queen Card 4 -->
+                    <div class="queen-card">
+                        <div class="queen-img-wrap">
+                            <img src="/assets/images/queens/queen-04.jpg" alt="Rhea, Jaipur styled in Madamcutie" class="queen-img" loading="lazy" onerror="this.style.opacity='0';">
+                            <div class="queen-placeholder-badge">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin-bottom: 4px; opacity: 0.6;"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
+                                <span>Rhea</span>
+                            </div>
+                        </div>
+                        <div class="queen-info">
+                            <h4 class="queen-name">Rhea, Jaipur</h4>
+                            <span class="queen-tag">Antique Zardosi Top</span>
+                        </div>
+                    </div>
+
+                    <!-- Queen Card 5 -->
+                    <div class="queen-card">
+                        <div class="queen-img-wrap">
+                            <img src="/assets/images/queens/queen-05.jpg" alt="Sneha, Kolkata styled in Madamcutie" class="queen-img" loading="lazy" onerror="this.style.opacity='0';">
+                            <div class="queen-placeholder-badge">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin-bottom: 4px; opacity: 0.6;"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
+                                <span>Sneha</span>
+                            </div>
+                        </div>
+                        <div class="queen-info">
+                            <h4 class="queen-name">Sneha, Kolkata</h4>
+                            <span class="queen-tag">Velvet Evening Gown</span>
+                        </div>
+                    </div>
+
+                    <!-- Queen Card 6 -->
+                    <div class="queen-card">
+                        <div class="queen-img-wrap">
+                            <img src="/assets/images/queens/queen-06.jpg" alt="Kavya, Chandigarh styled in Madamcutie" class="queen-img" loading="lazy" onerror="this.style.opacity='0';">
+                            <div class="queen-placeholder-badge">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin-bottom: 4px; opacity: 0.6;"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
+                                <span>Kavya</span>
+                            </div>
+                        </div>
+                        <div class="queen-info">
+                            <h4 class="queen-name">Kavya, Chandigarh</h4>
+                            <span class="queen-tag">Metallic Co-ords Set</span>
+                        </div>
+                    </div>
+
+                    <!-- Queen Card 7 -->
+                    <div class="queen-card">
+                        <div class="queen-img-wrap">
+                            <img src="/assets/images/queens/queen-07.jpg" alt="Tanvi, Hyderabad styled in Madamcutie" class="queen-img" loading="lazy" onerror="this.style.opacity='0';">
+                            <div class="queen-placeholder-badge">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin-bottom: 4px; opacity: 0.6;"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
+                                <span>Tanvi</span>
+                            </div>
+                        </div>
+                        <div class="queen-info">
+                            <h4 class="queen-name">Tanvi, Hyderabad</h4>
+                            <span class="queen-tag">Gold Sequin Bralette</span>
+                        </div>
+                    </div>
+
+                    <!-- Queen Card 8 -->
+                    <div class="queen-card">
+                        <div class="queen-img-wrap">
+                            <img src="/assets/images/queens/queen-08.jpg" alt="Pooja, Pune styled in Madamcutie" class="queen-img" loading="lazy" onerror="this.style.opacity='0';">
+                            <div class="queen-placeholder-badge">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin-bottom: 4px; opacity: 0.6;"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
+                                <span>Pooja</span>
+                            </div>
+                        </div>
+                        <div class="queen-info">
+                            <h4 class="queen-name">Pooja, Pune</h4>
+                            <span class="queen-tag">Diamond Lattice Corset</span>
+                        </div>
+                    </div>
+
+                    <!-- Queen Card 9 -->
+                    <div class="queen-card">
+                        <div class="queen-img-wrap">
+                            <img src="/assets/images/queens/queen-09.jpg" alt="Aarohi, Ahmedabad styled in Madamcutie" class="queen-img" loading="lazy" onerror="this.style.opacity='0';">
+                            <div class="queen-placeholder-badge">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin-bottom: 4px; opacity: 0.6;"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
+                                <span>Aarohi</span>
+                            </div>
+                        </div>
+                        <div class="queen-info">
+                            <h4 class="queen-name">Aarohi, Ahmedabad</h4>
+                            <span class="queen-tag">Handcrafted Saree Blouse</span>
+                        </div>
+                    </div>
+
+                    <!-- Queen Card 10 -->
+                    <div class="queen-card">
+                        <div class="queen-img-wrap">
+                            <img src="/assets/images/queens/queen-10.jpg" alt="Simran, Lucknow styled in Madamcutie" class="queen-img" loading="lazy" onerror="this.style.opacity='0';">
+                            <div class="queen-placeholder-badge">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin-bottom: 4px; opacity: 0.6;"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
+                                <span>Simran</span>
+                            </div>
+                        </div>
+                        <div class="queen-info">
+                            <h4 class="queen-name">Simran, Lucknow</h4>
+                            <span class="queen-tag">Party Wear Blouse</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer" style="background: var(--color-primary); color: white; padding: 80px 0 30px;">
+        <div class="container">
+            <div class="grid grid-4" style="margin-bottom: 60px;">
+                <div>
+                    <h3 style="font-family: var(--font-heading); font-size: 2rem; margin-bottom: 20px; letter-spacing: 1px;">Madamcutie</h3>
+                    <p style="color: #aaa; margin-bottom: 20px; line-height: 1.6; font-size: 0.95rem;">Effortless style for everyday queens. Elegant, comfortable, and empowering fashion designed for the modern woman.</p>
+                    <p style="color: #aaa; margin-bottom: 5px; font-size: 0.9rem;"><strong>Phone:</strong> +91-9911852113</p>
+                    <p style="color: #aaa; margin-bottom: 20px; font-size: 0.9rem;"><strong>Email:</strong> madamcutie1995@gmail.com</p><br><a href="/admin.html" style="color: #666; text-decoration: none; font-size: 0.8rem; margin-top: 10px; display: inline-block;">Admin Login</a>
+                    <div style="display: flex; gap: 20px;">
+                        <a href="#" class="social-icon" style="color: white;" title="Facebook"><svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg></a>
+                        <a href="https://www.instagram.com/madamcutie.co?igsh=OGcwdmFxYTBuZGhv&amp;utm_source=qr" target="_blank" class="social-icon" style="color: white;" title="Instagram"><svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a>
+                        <a href="#" class="social-icon" style="color: white;" title="Pinterest"><svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C6.48 2 2 6.48 2 12c0 4.25 2.65 7.9 6.44 9.32-.09-.78-.17-1.98.03-2.83.18-.75 1.16-4.94 1.16-4.94s-.3-.6-.3-1.48c0-1.39.81-2.43 1.82-2.43.85 0 1.26.64 1.26 1.4 0 .86-.54 2.14-.83 3.32-.24.99.5 1.8 1.47 1.8 1.76 0 3.12-1.86 3.12-4.54 0-2.38-1.71-4.04-4.16-4.04-2.84 0-4.5 2.13-4.5 4.32 0 .85.33 1.76.74 2.26.08.1.09.18.06.28-.08.35-.27 1.09-.31 1.25-.05.19-.17.23-.37.14-1.38-.63-2.24-2.61-2.24-4.2 0-3.42 2.49-6.56 7.16-6.56 3.76 0 6.68 2.68 6.68 6.26 0 3.74-2.36 6.75-5.63 6.75-1.1 0-2.13-.57-2.48-1.24l-.68 2.58c-.24.92-.91 2.07-1.35 2.77 1.07.33 2.21.5 3.39.5 5.52 0 10-4.48 10-10S17.52 2 12 2z"></path></svg></a>
+                    </div>
+                </div>
+                <div style="padding-left: 20px;">
+                    <h4 style="margin-bottom: 25px; letter-spacing: 2px; font-size: 0.9rem; text-transform: uppercase;">Shop</h4>
+                    <ul style="list-style: none; padding: 0; margin: 0; line-height: 2.5;">
+                        <li><a href="shop.html" class="footer-link" style="color: #aaa; text-decoration: none;">New Arrivals</a></li>
+                        <li><a href="shop.html?category=dresses" class="footer-link" style="color: #aaa; text-decoration: none;">Dresses</a></li>
+                        <li><a href="shop.html?collection=lookbook" class="footer-link" style="color: #aaa; text-decoration: none;">Lookbook</a></li>
+                        <li><a href="shop.html?collection=all" class="footer-link" style="color: #aaa; text-decoration: none;">Collections</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 style="margin-bottom: 25px; letter-spacing: 2px; font-size: 0.9rem; text-transform: uppercase;">About</h4>
+                    <ul style="list-style: none; padding: 0; margin: 0; line-height: 2.5;">
+                        <li><a href="about.html" class="footer-link" style="color: #aaa; text-decoration: none;">Our Story</a></li>
+                        <li><a href="policy.html" class="footer-link" style="color: #aaa; text-decoration: none;">Policies</a></li>
+                        <li><a href="#" class="footer-link" style="color: #aaa; text-decoration: none;">Careers</a></li>
+                        <li><a href="https://wa.me/919911852113" target="_blank">For Wholesale</a><a href="creators.html">For Creators</a><a href="contact.html" class="footer-link" style="color: #aaa; text-decoration: none;">Contact Us</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 style="margin-bottom: 25px; letter-spacing: 2px; font-size: 0.9rem; text-transform: uppercase;">Help</h4>
+                    <ul style="list-style: none; padding: 0; margin: 0; line-height: 2.5;">
+                        <li><a href="#" class="footer-link" style="color: #aaa; text-decoration: none;">FAQ</a></li>
+                        <li><a href="policy.html" class="footer-link" style="color: #aaa; text-decoration: none;">Shipping &amp; Returns</a></li>
+                        <li><a href="#" class="footer-link" style="color: #aaa; text-decoration: none;">Size Guide</a></li>
+                        <li><a href="#" class="footer-link" style="color: #aaa; text-decoration: none;">Track Order</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 30px; display: flex; justify-content: space-between; align-items: center; color: #777; font-size: 0.85rem; flex-wrap: wrap; gap: 20px;">
+                <p>© 2026 Madamcutie. All rights reserved.</p>
+                <div style="display: flex; gap: 10px;">
+                    <span style="font-size: 1.5rem;">💳</span>
+                    <span style="font-size: 1.5rem;">🏦</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Floating Social Buttons -->
+    <div class="floating-social-buttons">
+        <a href="https://www.instagram.com/madamcutie.co?igsh=OGcwdmFxYTBuZGhv&amp;utm_source=qr" target="_blank" class="social-floating instagram-floating" aria-label="Instagram">
+            <svg viewBox="0 0 24 24" width="26" height="26" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+        </a>
+        <a href="https://wa.me/919911852113" target="_blank" class="social-floating whatsapp-floating" aria-label="Chat on WhatsApp">
+            <svg viewBox="0 0 24 24" width="32" height="32" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"></path></svg>
+        </a>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/products.js"></script>
+    <script src="js/cart.js"></script>
+    <script src="js/main.js"></script>
+    <script>
+        // Load Featured Products
+        function loadFeaturedProducts() {
+            const container = document.getElementById('madam-grid');
+            if (!container) return;
+
+            const featuredList = (typeof PRODUCTS !== 'undefined' ? PRODUCTS : []).slice(0, 8);
+            if (featuredList.length === 0) return;
+
+            container.innerHTML = featuredList.map(p => {
+                const altImage = p.image;
+                return `
+                    <div class="product-card" id="card-${p.id}">
+                        <div class="product-image-wrapper">
+                            <div style="position: absolute; top: 15px; left: 15px; z-index: 5; display: flex; flex-direction: column; gap: 5px; align-items: flex-start;">
+                                ${p.sale ? '<span class="product-badge sale" style="position: static;">SALE</span>' : ''}
+                                ${p.bestseller ? '<span class="product-badge bestseller" style="position: static; color: var(--color-gold-base); border: 1px solid var(--color-gold-base); background: #fff; font-weight: 700;">BEST SELLER</span>' : ''}
+                            </div>
+                            <a href="product.html?id=${p.id}">
+                                <img src="${p.image}" alt="${p.name}" class="product-image" loading="lazy">
+                            </a>
+                            <button class="product-quick-add" onclick="event.preventDefault(); addToCart('${p.id}', '${p.name}', ${p.price}, '${p.image}')">Quick Add</button>
+                        </div>
+                        <div class="product-info">
+                            <span class="product-cat">${p.category}</span>
+                            <h3 class="product-title"><a href="product.html?id=${p.id}">${p.name}</a></h3>
+                            <div class="product-rating" style="color: var(--color-gold-base);">
+                                <span>★★★★★</span>
+                                <span class="product-rating-count" style="color: var(--color-text-secondary);">(${p.reviews || 48})</span>
+                            </div>
+                            <span class="product-price">
+                                ₹${p.price}
+                                ${p.sale && p.original_price ? `<span style="text-decoration: line-through; color: #888; font-size: 0.85em; font-weight: normal; margin-left: 8px;">₹${p.original_price}</span>` : ''}
+                            </span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Styled By Our Queens Carousel Navigation
+        function scrollQueens(direction) {
+            const track = document.getElementById('queens-track');
+            if (!track) return;
+            const card = track.querySelector('.queen-card');
+            const cardWidth = card ? card.offsetWidth + 20 : 240;
+            const scrollAmount = direction * cardWidth * (window.innerWidth > 1024 ? 3 : 1);
+            track.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadFeaturedProducts();
+        });
+    </script>
+</body>
+</html>

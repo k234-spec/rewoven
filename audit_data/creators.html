@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For Creators | Madamcutie</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container nav-container">
+            <div class="logo-wrapper">
+                <img src="/assets/images/logo.jpg" alt="Madamcutie Logo" class="logo-img">
+                <a href="index.html" class="logo-text" style="background: linear-gradient(45deg, #d4af37, #f3e5ab, #b8860b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 800; font-family: var(--font-heading); font-size: clamp(1.5rem, 4vw, 2.2rem); letter-spacing: 2px;">Madamcutie</a>
+            </div>
+            
+            <nav class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="shop.html">Shop</a>
+                <a href="about.html">Our Story</a>
+                <a href="https://wa.me/919911852113" target="_blank">For Wholesale</a>
+                <a href="creators.html" class="active">For Creators</a>
+                <a href="contact.html">Contact</a>
+            </nav>
+
+            <div class="header-actions">
+                <button class="action-btn" id="search-trigger" title="Search"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle;"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></button>
+                <a href="cart.html" class="action-btn" title="Shopping Bag">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle;"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+                    <span class="cart-count">0</span>
+                </a>
+                <button class="mobile-menu-toggle action-btn" aria-label="Toggle Menu" onclick="toggleMobileNav()">☰</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Mobile Nav -->
+    <div class="mobile-nav-drawer" id="mobile-nav">
+        <button class="drawer-close-btn" onclick="toggleMobileNav()">✕</button>
+        <nav class="mobile-nav-links">
+            <a href="index.html">Home</a>
+            <a href="shop.html">Shop</a>
+            <a href="about.html">Our Story</a>
+            <a href="https://wa.me/919911852113" target="_blank">For Wholesale</a>
+            <a href="creators.html" class="active">For Creators</a>
+            <a href="contact.html">Contact</a>
+        </nav>
+    </div>
+    <div class="mobile-nav-drawer-overlay" id="mobile-nav-overlay" onclick="toggleMobileNav()"></div>
+
+    <!-- Creators Hero -->
+    <section class="section" style="background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('/assets/images/madam/party_wear_3.jpg'); background-size: cover; background-position: center; height: 60vh; display: flex; align-items: center; text-align: center; color: #fff;">
+        <div class="container">
+            <h1 style="font-family: var(--font-heading); font-size: clamp(2.5rem, 8vw, 5rem); margin-bottom: 20px;">Collaborate With Us</h1>
+            <p style="font-size: 1.2rem; max-width: 800px; margin: 0 auto;">Are you a content creator, influencer, or fashion enthusiast? Join the Madamcutie family.</p>
+        </div>
+    </section>
+
+    <!-- Creator Info -->
+    <section class="section">
+        <div class="container">
+            <div class="grid grid-responsive-3-2-1 text-center" style="gap: 40px;">
+                <div style="padding: 30px; border: 1px solid var(--color-border);">
+                    <div style="font-size: 2.5rem; margin-bottom: 20px;">📸</div>
+                    <h3 style="margin-bottom: 15px;">Content Creation</h3>
+                    <p style="color: #666;">Get exclusive access to our latest collections for your content.</p>
+                </div>
+                <div style="padding: 30px; border: 1px solid var(--color-border);">
+                    <div style="font-size: 2.5rem; margin-bottom: 20px;">💎</div>
+                    <h3 style="margin-bottom: 15px;">Exclusive Perks</h3>
+                    <p style="color: #666;">Receive special discounts and commission on every sale you drive.</p>
+                </div>
+                <div style="padding: 30px; border: 1px solid var(--color-border);">
+                    <div style="font-size: 2.5rem; margin-bottom: 20px;">🤝</div>
+                    <h3 style="margin-bottom: 15px;">Grow Together</h3>
+                    <p style="color: #666;">Be featured on our official social media channels and website.</p>
+                </div>
+            </div>
+            
+            <div style="margin-top: 80px; text-align: center;">
+                <h2 style="font-family: var(--font-heading); font-size: clamp(2rem, 5vw, 3rem); margin-bottom: 30px;">Apply to Join</h2>
+                <a href="https://wa.me/919911852113?text=I am a creator and I want to collaborate with Madamcutie" target="_blank" class="btn btn-primary" style="padding: 18px 50px;">DM US ON WHATSAPP</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container text-center">
+            <p>&copy; 2026 Madamcutie. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="/js/cart.js"></script>
+    <script src="/js/main.js"></script>
+</body>
+</html>

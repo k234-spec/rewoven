@@ -1,0 +1,106 @@
+// Prisma schema for Madamcutie luxury ethnic fashion platform
+// Configured for PostgreSQL (Supabase)
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model Product {
+  id            String          @id @default(cuid())
+  sku           String          @unique
+  name          String
+  slug          String          @unique
+  category      String
+  description   String          @db.Text
+  fabricDetails String?         @db.Text
+  careGuide     String?
+  price         Decimal         @db.Decimal(10, 2)
+  originalPrice Decimal?        @db.Decimal(10, 2)
+  isSale        Boolean         @default(false)
+  isBestseller  Boolean         @default(false)
+  isFeatured    Boolean         @default(false)
+  occasion      String?
+  fabric        String?
+  color         String?
+  images        ProductImage[]
+  variants      ProductVariant[]
+  reviews       Review[]
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+
+  @@index([category])
+  @@index([occasion])
+  @@index([fabric])
+  @@index([color])
+  @@index([price])
+}
+
+model Review {
+  id        String   @id @default(cuid())
+  productId String
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  rating    Int      @default(5)
+  author    String
+  comment   String?  @db.Text
+  createdAt DateTime @default(now())
+
+  @@index([productId])
+}
+
+model ProductVariant {
+  id         String      @id @default(cuid())
+  productId  String
+  product    Product     @relation(fields: [productId], references: [id], onDelete: Cascade)
+  size       String      // "XS (32)", "S (34)", "M (36)", "L (38)", "XL (40)", "XXL (42)", "Custom Stitching"
+  color      String?     // "Emerald", "Mustard", "Noir", "Silver"
+  stockQty   Int         @default(10)
+  orderItems OrderItem[]
+
+  @@index([productId])
+}
+
+model ProductImage {
+  id        String   @id @default(cuid())
+  productId String
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  url       String
+  altText   String?
+  sortOrder Int      @default(0)
+
+  @@index([productId])
+}
+
+model Order {
+  id              String      @id @default(cuid())
+  orderNumber     String      @unique // e.g., "MC-2026-1042"
+  customerName    String
+  customerEmail   String
+  customerPhone   String
+  shippingAddress Json
+  totalAmount     Decimal     @db.Decimal(10, 2)
+  paymentMethod   String      // "RAZORPAY_UPI", "CARD", "COD", "WHATSAPP_ASSISTED"
+  paymentStatus   String      // "PENDING", "PAID", "FAILED"
+  orderStatus     String      @default("RECEIVED") // "RECEIVED", "PROCESSING", "DISPATCHED", "DELIVERED"
+  trackingNumber  String?
+  items           OrderItem[]
+  createdAt       DateTime    @default(now())
+}
+
+model OrderItem {
+  id        String         @id @default(cuid())
+  orderId   String
+  order     Order          @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  variantId String
+  variant   ProductVariant @relation(fields: [variantId], references: [id])
+  quantity  Int            @default(1)
+  unitPrice Decimal        @db.Decimal(10, 2)
+
+  @@index([orderId])
+  @@index([variantId])
+}
