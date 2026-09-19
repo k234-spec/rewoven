@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { ALL_PRODUCTS, EnrichedProduct } from '@/lib/products-data';
 
+export const dynamic = 'force-dynamic';
+
 // In-memory catalog copy for seamless local development when database is offline
 const inMemoryProducts: EnrichedProduct[] = [...ALL_PRODUCTS];
 

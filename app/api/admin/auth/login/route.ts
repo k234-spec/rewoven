@@ -5,6 +5,8 @@ import {
   ADMIN_COOKIE_NAME,
 } from '@/lib/auth/admin-session';
 
+export const dynamic = 'force-dynamic';
+
 export async function POST(request: Request) {
   try {
     const body = await request.json();
