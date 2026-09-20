@@ -1,6 +1,365 @@
 ﻿'use client';
-import {useState,useEffect} from 'react';
-import {Product,money} from '@/lib/rewoven/catalog';
-type Row=Record<string,string|number>;
-type Data={products:Row[];stock:Row[];orders:Row[];enquiries:Row[];users:Row[];quotes:Row[];settings:Record<string,string|number>};
-export default function Admin(){const[data,setData]=useState<Data|null>(null),[tab,setTab]=useState('Products'),[status,setStatus]=useState(''),[editing,setEditing]=useState<Row|null>(null);async function reload(){const r=await fetch('/api/rewoven/service/admin');if(r.ok)setData(await r.json());else setStatus('Administrator access required.')}useEffect(()=>{reload()},[]);async function save(body:unknown){try{const r=await fetch('/api/rewoven/service/admin',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});const d=await r.json();setStatus(d.message||d.error);if(r.ok){setEditing(null);reload()}}catch{setStatus('Unable to save. Please try again.')}}return <div className="page-wrap admin-page"><p className="eyebrow">REWOVEN / MERCHANT STUDIO</p><h1>Your store, thoughtfully managed.</h1><div className="account-tabs">{['Products','Orders','Wholesale','Quotations','Settings'].map(t=><button className={tab===t?'chosen':''} key={t} onClick={()=>setTab(t)}>{t}</button>)}</div>{status&&<p className="form-status" role="status">{status}</p>}{!data?<p>Loading store…</p>:<>{tab==='Products'&&<><p className="muted">Demo inventory. Confirm imagery, product specifications, pricing and stock before commercial launch.</p><button className="button" onClick={()=>setEditing({id:'new-piece',data:JSON.stringify({id:'new-piece',name:'New occasionwear piece',category:'Sherwani',occasion:'Wedding',price:10000,color:'Ivory',hex:'#e4dac4',image:0,fresh:true,sizes:['M','L']}),trade_price:6000,moq:6})}>Add product</button>{editing?<form className="admin-edit" onSubmit={e=>{e.preventDefault();const f=Object.fromEntries(new FormData(e.currentTarget));try{const p=JSON.parse(String(f.data));save({kind:'product',product:p,tradePrice:Number(f.tradePrice),moq:Number(f.moq),stock:Number(f.stock)})}catch{setStatus('Product JSON must be valid.')}}}><h2>Edit product</h2><div className="form-grid"><label className="full">Product data (including collection, images and variants)<textarea name="data" defaultValue={String(editing.data)} rows={15} style={{minHeight:300,fontFamily:'monospace'}}/></label><label>Wholesale base price (INR)<input type="number" name="tradePrice" min="1" required defaultValue={editing.trade_price}/></label><label>Minimum order quantity<input name="moq" type="number" min="1" required defaultValue={editing.moq}/></label><label>Available stock per listed variant<input name="stock" type="number" min="0" required defaultValue={20}/></label></div><button className="button primary">Save product</button><button type="button" className="button" onClick={()=>setEditing(null)}>Cancel</button></form>:<div className="admin-table"><table><thead><tr><th>Product</th><th>Retail</th><th>Trade</th><th>MOQ</th><th/></tr></thead><tbody>{data.products.map(r=>{const p=JSON.parse(String(r.data)) as Product;return <tr key={r.id}><td>{p.name}<small>{p.category} · {p.sizes.join(', ')}</small></td><td>{money(p.price)}</td><td>{money(Number(r.trade_price))}</td><td>{r.moq}</td><td><button className="text-link" onClick={()=>setEditing(r)}>Edit</button></td></tr>})}</tbody></table></div>}</>}{tab==='Orders'&&<><p className="muted">Only verified paid orders can move into fulfilment. Pending orders reserve inventory until reconciled.</p>{data.orders.length?data.orders.map(o=><form className="admin-record" key={o.id} onSubmit={e=>{e.preventDefault();save({kind:'order',id:o.id,...Object.fromEntries(new FormData(e.currentTarget))})}}><strong>{o.id} · {money(Number(o.total))}</strong><p>{o.email} · {o.status}</p><div className="form-grid"><label>Status<select name="status"><option>PROCESSING</option><option>DISPATCHED</option><option>DELIVERED</option></select></label><label>Tracking reference<input name="tracking" defaultValue={o.tracking||''}/></label></div><button className="button">Update fulfilment</button></form>):<p>No orders yet.</p>}</>}{tab==='Wholesale'&&<><h2>Applications & enquiries</h2>{data.enquiries.map(e=><div className="admin-record" key={e.id}><strong>{e.id} · {e.status}</strong><pre>{JSON.stringify(JSON.parse(String(e.data)),null,2)}</pre><button className="button" onClick={()=>save({kind:'enquiry',id:e.id,status:'REVIEWED'})}>Mark reviewed</button></div>)}<h2>Account approval</h2>{data.users.filter(u=>u.role!=='admin').map(u=><div className="address-row" key={u.id}><div>{u.name}<p>{u.email}</p></div><button className="button" onClick={()=>save({kind:'approve',id:u.id,approved:!u.approved})}>{u.approved?'Revoke trade access':'Approve trade access'}</button></div>)}</>}{tab==='Quotations'&&<>{data.quotes.length?data.quotes.map(q=><div className="admin-record" key={q.id}><strong>{q.id} · {money(Number(q.total))} · {q.status}</strong><pre>{JSON.stringify(JSON.parse(String(q.items)),null,2)}</pre>{q.status==='REQUESTED'&&<><button className="button primary" onClick={()=>save({kind:'quote',id:q.id,status:'APPROVED'})}>Approve quotation</button><button className="button" onClick={()=>save({kind:'quote',id:q.id,status:'DECLINED'})}>Decline</button></>}</div>):<p>No quotation requests yet.</p>}</>}{tab==='Settings'&&<form onSubmit={e=>{e.preventDefault();save({kind:'settings',values:Object.fromEntries(new FormData(e.currentTarget))})}}><h2>Brand & checkout configuration</h2><div className="form-grid">{['announcement','email','phone','whatsapp','instagram','address','shipping','taxPercent'].map(k=><label key={k}>{k}<input name={k} type={['shipping','taxPercent'].includes(k)?'number':'text'} min={0} max={k==='taxPercent'?100:undefined} defaultValue={data.settings[k]??''}/></label>)}{['shippingPolicy','returnsPolicy','privacyPolicy','termsPolicy'].map(k=><label className="full" key={k}>{k} (merchant-approved content)<textarea name={k} defaultValue={data.settings[k]??''}/></label>)}</div><p className="muted">Shipping is a flat INR amount. Tax is an additional percentage; configure both explicitly. Razorpay keys belong in server environment variables, never in this form.</p><button className="button primary">Save settings</button></form>}</>}</div>}
+import { useState, useEffect } from 'react';
+import { Product, money } from '@/lib/rewoven/catalog';
+type Row = Record<string, string | number>;
+type Data = {
+  products: Row[];
+  stock: Row[];
+  orders: Row[];
+  enquiries: Row[];
+  users: Row[];
+  quotes: Row[];
+  settings: Record<string, string | number>;
+};
+export default function Admin() {
+  const [data, setData] = useState<Data | null>(null),
+    [tab, setTab] = useState('Products'),
+    [status, setStatus] = useState(''),
+    [editing, setEditing] = useState<Row | null>(null);
+  async function reload() {
+    const r = await fetch('/api/rewoven/service/admin');
+    if (r.ok) setData(await r.json());
+    else setStatus('Administrator access required.');
+  }
+  useEffect(() => {
+    reload();
+  }, []);
+  async function save(body: unknown) {
+    try {
+      const r = await fetch('/api/rewoven/service/admin', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+      });
+      const d = await r.json();
+      setStatus(d.message || d.error);
+      if (r.ok) {
+        setEditing(null);
+        reload();
+      }
+    } catch {
+      setStatus('Unable to save. Please try again.');
+    }
+  }
+  return (
+    <div className="page-wrap admin-page">
+      <p className="eyebrow">REWOVEN / MERCHANT STUDIO</p>
+      <h1>Your store, thoughtfully managed.</h1>
+      <div className="account-tabs">
+        {['Products', 'Orders', 'Wholesale', 'Quotations', 'Settings'].map((t) => (
+          <button className={tab === t ? 'chosen' : ''} key={t} onClick={() => setTab(t)}>
+            {t}
+          </button>
+        ))}
+      </div>
+      {status && (
+        <p className="form-status" role="status">
+          {status}
+        </p>
+      )}
+      {!data ? (
+        <p>Loading store…</p>
+      ) : (
+        <>
+          {tab === 'Products' && (
+            <>
+              <p className="muted">
+                Demo inventory. Confirm imagery, product specifications, pricing and stock before
+                commercial launch.
+              </p>
+              <button
+                className="button"
+                onClick={() =>
+                  setEditing({
+                    id: 'new-piece',
+                    data: JSON.stringify({
+                      id: 'new-piece',
+                      name: 'New occasionwear piece',
+                      category: 'Sherwani',
+                      occasion: 'Wedding',
+                      price: 10000,
+                      color: 'Ivory',
+                      hex: '#e4dac4',
+                      image: 0,
+                      fresh: true,
+                      sizes: ['M', 'L'],
+                    }),
+                    trade_price: 6000,
+                    moq: 6,
+                  })
+                }
+              >
+                Add product
+              </button>
+              {editing ? (
+                <form
+                  className="admin-edit"
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    const f = Object.fromEntries(new FormData(e.currentTarget));
+                    try {
+                      const p = JSON.parse(String(f.data));
+                      save({
+                        kind: 'product',
+                        product: p,
+                        tradePrice: Number(f.tradePrice),
+                        moq: Number(f.moq),
+                        stockChanges:data.stock.filter(s=>s.product_id===editing.id).flatMap((s,index)=>{
+                          const value=String(f[`stock_${index}`]??'').trim();
+                          return value===''?[]:[{size:String(s.size),color:String(s.color),quantity:Number(value),expected:Number(s.quantity)}];
+                        }),
+                      });
+                    } catch {
+                      setStatus('Product JSON must be valid.');
+                    }
+                  }}
+                >
+                  <h2>Edit product</h2>
+                  <div className="form-grid">
+                    <label className="full">
+                      Product data (including collection, images and variants)
+                      <textarea
+                        name="data"
+                        defaultValue={String(editing.data)}
+                        rows={15}
+                        style={{ minHeight: 300, fontFamily: 'monospace' }}
+                      />
+                    </label>
+                    <label>
+                      Wholesale base price (INR)
+                      <input
+                        type="number"
+                        name="tradePrice"
+                        min="1"
+                        required
+                        defaultValue={editing.trade_price}
+                      />
+                    </label>
+                    <label>
+                      Minimum order quantity
+                      <input name="moq" type="number" min="1" required defaultValue={editing.moq} />
+                    </label>
+                    <p className="full muted">Leave stock adjustments blank to preserve inventory. New sizes start at zero; save the product, then reopen it to set their stock.</p>
+                    {data.stock.filter(s=>s.product_id===editing.id).map((s,index)=>(
+                      <label key={`${s.color}-${s.size}`}>
+                        {s.color} / {s.size} — currently {s.quantity} available
+                        <input name={`stock_${index}`} type="number" min="0" step="1" placeholder="Keep current stock" defaultValue=""/>
+                      </label>
+                    ))}
+                  </div>
+                  <button className="button primary">Save product</button>
+                  <button type="button" className="button" onClick={() => setEditing(null)}>
+                    Cancel
+                  </button>
+                </form>
+              ) : (
+                <div className="admin-table">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Product</th>
+                        <th>Retail</th>
+                        <th>Trade</th>
+                        <th>MOQ</th>
+                        <th />
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {data.products.map((r) => {
+                        const p = JSON.parse(String(r.data)) as Product;
+                        return (
+                          <tr key={r.id}>
+                            <td>
+                              {p.name}
+                              <small>
+                                {p.category} · {p.sizes.join(', ')}
+                              </small>
+                            </td>
+                            <td>{money(p.price)}</td>
+                            <td>{money(Number(r.trade_price))}</td>
+                            <td>{r.moq}</td>
+                            <td>
+                              <button className="text-link" onClick={() => setEditing(r)}>
+                                Edit
+                              </button>
+                            </td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+            </>
+          )}
+          {tab === 'Orders' && (
+            <>
+              <p className="muted">
+                Only verified paid orders can move into fulfilment. Pending orders reserve inventory
+                until reconciled.
+              </p>
+              {data.orders.length ? (
+                data.orders.map((o) => (
+                  <form
+                    className="admin-record"
+                    key={o.id}
+                    onSubmit={(e) => {
+                      e.preventDefault();
+                      save({
+                        kind: 'order',
+                        id: o.id,
+                        ...Object.fromEntries(new FormData(e.currentTarget)),
+                      });
+                    }}
+                  >
+                    <strong>
+                      {o.id} · {money(Number(o.total))}
+                    </strong>
+                    <p>
+                      {o.email} · {o.status}
+                    </p>
+                    {o.status==='PAYMENT_REVIEW'&&<p className="error">Payment received, but stock could not be reserved. Resolve inventory or arrange a refund before fulfilment.</p>}
+                    {['PENDING','FAILED','CANCELLED','EXPIRED','PAYMENT_REVIEW'].includes(String(o.status))&&<button className="button" type="button" onClick={()=>save({kind:'reconcile',id:o.id})}>Refresh payment status</button>}
+                    <div className="form-grid">
+                      <label>
+                        Status
+                        <select name="status">
+                          <option>PROCESSING</option>
+                          <option>DISPATCHED</option>
+                          <option>DELIVERED</option>
+                        </select>
+                      </label>
+                      <label>
+                        Tracking reference
+                        <input name="tracking" defaultValue={o.tracking || ''} />
+                      </label>
+                    </div>
+                    <button className="button" disabled={!['PAID','PROCESSING','DISPATCHED','DELIVERED'].includes(String(o.status))}>Update fulfilment</button>
+                  </form>
+                ))
+              ) : (
+                <p>No orders yet.</p>
+              )}
+            </>
+          )}
+          {tab === 'Wholesale' && (
+            <>
+              <h2>Applications & enquiries</h2>
+              {data.enquiries.map((e) => (
+                <div className="admin-record" key={e.id}>
+                  <strong>
+                    {e.id} · {e.status}
+                  </strong>
+                  <pre>{JSON.stringify(JSON.parse(String(e.data)), null, 2)}</pre>
+                  <button
+                    className="button"
+                    onClick={() => save({ kind: 'enquiry', id: e.id, status: 'REVIEWED' })}
+                  >
+                    Mark reviewed
+                  </button>
+                </div>
+              ))}
+              <h2>Account approval</h2>
+              {data.users
+                .filter((u) => u.role !== 'admin')
+                .map((u) => (
+                  <div className="address-row" key={u.id}>
+                    <div>
+                      {u.name}
+                      <p>{u.email}</p>
+                    </div>
+                    <button
+                      className="button"
+                      onClick={() => save({ kind: 'approve', id: u.id, approved: !u.approved })}
+                    >
+                      {u.approved ? 'Revoke trade access' : 'Approve trade access'}
+                    </button>
+                  </div>
+                ))}
+            </>
+          )}
+          {tab === 'Quotations' && (
+            <>
+              {data.quotes.length ? (
+                data.quotes.map((q) => (
+                  <div className="admin-record" key={q.id}>
+                    <strong>
+                      {q.id} · {money(Number(q.total))} · {q.status}
+                    </strong>
+                    <pre>{JSON.stringify(JSON.parse(String(q.items)), null, 2)}</pre>
+                    {q.status === 'REQUESTED' && (
+                      <>
+                        <button
+                          className="button primary"
+                          onClick={() => save({ kind: 'quote', id: q.id, status: 'APPROVED' })}
+                        >
+                          Approve quotation
+                        </button>
+                        <button
+                          className="button"
+                          onClick={() => save({ kind: 'quote', id: q.id, status: 'DECLINED' })}
+                        >
+                          Decline
+                        </button>
+                      </>
+                    )}
+                  </div>
+                ))
+              ) : (
+                <p>No quotation requests yet.</p>
+              )}
+            </>
+          )}
+          {tab === 'Settings' && (
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                save({
+                  kind: 'settings',
+                  values: Object.fromEntries(new FormData(e.currentTarget)),
+                });
+              }}
+            >
+              <h2>Brand & checkout configuration</h2>
+              <div className="form-grid">
+                {[
+                  'announcement',
+                  'email',
+                  'phone',
+                  'whatsapp',
+                  'instagram',
+                  'address',
+                  'shipping',
+                  'taxPercent',
+                ].map((k) => (
+                  <label key={k}>
+                    {k}
+                    <input
+                      name={k}
+                      type={['shipping', 'taxPercent'].includes(k) ? 'number' : 'text'}
+                      min={0}
+                      max={k === 'taxPercent' ? 100 : undefined}
+                      defaultValue={data.settings[k] ?? ''}
+                    />
+                  </label>
+                ))}
+                {['shippingPolicy', 'returnsPolicy', 'privacyPolicy', 'termsPolicy'].map((k) => (
+                  <label className="full" key={k}>
+                    {k} (merchant-approved content)
+                    <textarea name={k} defaultValue={data.settings[k] ?? ''} />
+                  </label>
+                ))}
+              </div>
+              <p className="muted">
+                Shipping is a flat INR amount. Tax is an additional percentage; configure both
+                explicitly. Razorpay keys belong in server environment variables, never in this
+                form.
+              </p>
+              <button className="button primary">Save settings</button>
+            </form>
+          )}
+        </>
+      )}
+    </div>
+  );
+}

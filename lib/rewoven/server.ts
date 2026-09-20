@@ -1,23 +1,36 @@
-﻿import {DatabaseSync} from 'node:sqlite';
+import {DatabaseSync} from 'node:sqlite';
 import {mkdirSync} from 'node:fs';
 import path from 'node:path';
 import {randomBytes,randomUUID,scryptSync,timingSafeEqual,createHash} from 'node:crypto';
 import {cookies} from 'next/headers';
 import {products,Product} from './catalog';
+import {dataDirectory} from './deployment';
 let instance:DatabaseSync;
-export function db(){if(instance)return instance;const dir=process.env.REWOVEN_DATA_DIR||path.join(process.cwd(),'.rewoven-data');mkdirSync(dir,{recursive:true});instance=new DatabaseSync(path.join(dir,'store.sqlite'));instance.exec(`PRAGMA journal_mode=WAL; PRAGMA foreign_keys=ON;
+export function db(){if(instance)return instance;const dir=dataDirectory();mkdirSync(dir,{recursive:true});instance=new DatabaseSync(path.join(dir,'store.sqlite'));instance.exec(`PRAGMA journal_mode=WAL; PRAGMA foreign_keys=ON; PRAGMA busy_timeout=5000;
 CREATE TABLE IF NOT EXISTS users(id TEXT PRIMARY KEY,email TEXT UNIQUE NOT NULL,name TEXT NOT NULL,password TEXT NOT NULL,role TEXT NOT NULL DEFAULT 'customer',approved INTEGER NOT NULL DEFAULT 0,addresses TEXT NOT NULL DEFAULT '[]',created TEXT NOT NULL);
 CREATE TABLE IF NOT EXISTS sessions(hash TEXT PRIMARY KEY,user_id TEXT NOT NULL REFERENCES users(id),expires INTEGER NOT NULL);
 CREATE TABLE IF NOT EXISTS resets(hash TEXT PRIMARY KEY,user_id TEXT NOT NULL REFERENCES users(id),expires INTEGER NOT NULL);
 CREATE TABLE IF NOT EXISTS catalog(id TEXT PRIMARY KEY,data TEXT NOT NULL,trade_price INTEGER NOT NULL,moq INTEGER NOT NULL DEFAULT 6);
 CREATE TABLE IF NOT EXISTS stock(product_id TEXT NOT NULL REFERENCES catalog(id),size TEXT NOT NULL,color TEXT NOT NULL,quantity INTEGER NOT NULL CHECK(quantity>=0),PRIMARY KEY(product_id,size,color));
 CREATE TABLE IF NOT EXISTS enquiries(id TEXT PRIMARY KEY,data TEXT NOT NULL,status TEXT NOT NULL DEFAULT 'PENDING',created TEXT NOT NULL);
-CREATE TABLE IF NOT EXISTS orders(id TEXT PRIMARY KEY,user_id TEXT,email TEXT NOT NULL,customer TEXT NOT NULL,items TEXT NOT NULL,subtotal INTEGER NOT NULL,shipping INTEGER NOT NULL,tax INTEGER NOT NULL,total INTEGER NOT NULL,status TEXT NOT NULL DEFAULT 'PENDING',payment_id TEXT UNIQUE,gateway_id TEXT UNIQUE,tracking TEXT,created TEXT NOT NULL);
-CREATE TABLE IF NOT EXISTS quotes(id TEXT PRIMARY KEY,user_id TEXT NOT NULL REFERENCES users(id),items TEXT NOT NULL,total INTEGER NOT NULL,status TEXT NOT NULL DEFAULT 'REQUESTED',created TEXT NOT NULL);
+CREATE TABLE IF NOT EXISTS orders(id TEXT PRIMARY KEY,user_id TEXT,email TEXT NOT NULL,customer TEXT NOT NULL,items TEXT NOT NULL,subtotal INTEGER NOT NULL,shipping INTEGER NOT NULL,tax INTEGER NOT NULL,total INTEGER NOT NULL,status TEXT NOT NULL DEFAULT 'PENDING',payment_id TEXT UNIQUE,gateway_id TEXT UNIQUE,tracking TEXT,reserved_until INTEGER,created TEXT NOT NULL);
+CREATE TABLE IF NOT EXISTS quotes(id TEXT PRIMARY KEY,user_id TEXT NOT NULL REFERENCES users(id),items TEXT NOT NULL,total INTEGER NOT NULL,status TEXT NOT NULL DEFAULT 'REQUESTED',order_id TEXT,created TEXT NOT NULL);
 CREATE TABLE IF NOT EXISTS settings(key TEXT PRIMARY KEY,value TEXT NOT NULL);
 CREATE TABLE IF NOT EXISTS payment_events(id TEXT PRIMARY KEY,created TEXT NOT NULL);
 CREATE TABLE IF NOT EXISTS rate_limits(key TEXT PRIMARY KEY,count INTEGER NOT NULL,expires INTEGER NOT NULL);
-`);const insert=instance.prepare('INSERT OR IGNORE INTO catalog(id,data,trade_price,moq) VALUES(?,?,?,?)');const variant=instance.prepare('INSERT OR IGNORE INTO stock(product_id,size,color,quantity) VALUES(?,?,?,?)');for(const p of products){insert.run(p.id,JSON.stringify(p),Math.round(p.price*.6),6);for(const size of p.sizes)variant.run(p.id,size,p.color,20)}return instance}
+`);
+// Inspect schema rather than swallowing all migration errors.
+const columns=(table:string)=>(instance.prepare(`PRAGMA table_info(${table})`).all() as {name:string}[]).map(c=>c.name);
+if(!columns('orders').includes('reserved_until'))instance.exec('ALTER TABLE orders ADD COLUMN reserved_until INTEGER');
+if(!columns('orders').includes('payment_checked_at'))instance.exec('ALTER TABLE orders ADD COLUMN payment_checked_at INTEGER');
+if(!columns('quotes').includes('order_id'))instance.exec('ALTER TABLE quotes ADD COLUMN order_id TEXT');
+if(!columns('orders').includes('stock_released')){
+  instance.exec('ALTER TABLE orders ADD COLUMN stock_released INTEGER NOT NULL DEFAULT 0');
+  instance.exec("UPDATE orders SET stock_released=1 WHERE status='EXPIRED'");
+}
+instance.exec('CREATE UNIQUE INDEX IF NOT EXISTS quotes_order_id ON quotes(order_id) WHERE order_id IS NOT NULL');
+instance.exec('CREATE INDEX IF NOT EXISTS orders_reservation ON orders(status,reserved_until)');
+const insert=instance.prepare('INSERT OR IGNORE INTO catalog(id,data,trade_price,moq) VALUES(?,?,?,?)');const variant=instance.prepare('INSERT OR IGNORE INTO stock(product_id,size,color,quantity) VALUES(?,?,?,?)');for(const p of products){insert.run(p.id,JSON.stringify(p),Math.round(p.price*.6),6);for(const size of p.sizes)variant.run(p.id,size,p.color,20)}return instance}
 export function catalog():Product[]{const sold=new Map<string,number>();for(const row of db().prepare("SELECT items FROM orders WHERE status IN ('PAID','PROCESSING','DISPATCHED','DELIVERED')").all() as {items:string}[])for(const i of JSON.parse(row.items))sold.set(i.id,(sold.get(i.id)||0)+i.qty);return (db().prepare('SELECT data FROM catalog').all() as {data:string}[]).map(r=>{const p=JSON.parse(r.data) as Product;const available=db().prepare('SELECT size FROM stock WHERE product_id=? AND color=? AND quantity>0').all(p.id,p.color) as {size:string}[];return {...p,sales:sold.get(p.id)||0,sizes:p.sizes.filter(size=>available.some(v=>v.size===size))}})}
 export function hash(value:string){return createHash('sha256').update(value).digest('hex')}
 export function passwordHash(password:string){const salt=randomBytes(16).toString('hex');return salt+':'+scryptSync(password,salt,64).toString('hex')}

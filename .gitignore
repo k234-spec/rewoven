@@ -1,6 +1,8 @@
 node_modules/
 .next/
 .rewoven-data/
+.rewoven-test-data/
+.freebuff/
 .env
 .env.local
 .env.*.local

@@ -2,8 +2,5 @@
   "version": 2,
   "rewrites": [
     { "source": "/api/(.*)", "destination": "/api/$1" }
-  ],
-  "env": {
-    "REWOVEN_DATA_DIR": "/tmp/rewoven-data"
-  }
+  ]
 }
