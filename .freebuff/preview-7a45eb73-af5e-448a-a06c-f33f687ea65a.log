@@ -1,0 +1,21 @@
+
+> rewoven@0.1.0 dev
+> next dev --port 3000
+
+   ▲ Next.js 15.5.25
+   - Local:        http://localhost:3000
+   - Network:      http://192.168.1.37:3000
+   - Environments: .env
+
+ ✓ Starting...
+ ✓ Ready in 4.9s
+ ○ Compiling / ...
+ ✓ Compiled / in 5.9s (683 modules)
+ GET / 200 in 7071ms
+ ✓ Compiled in 2.3s (257 modules)
+ ✓ Compiled in 1863ms (257 modules)
+ ✓ Compiled in 769ms (257 modules)
+ ✓ Compiled in 982ms (257 modules)
+ ✓ Compiled in 729ms (257 modules)
+ ✓ Compiled in 2.1s (257 modules)
+ ✓ Compiled in 1600ms (257 modules)

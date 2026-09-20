@@ -12,28 +12,32 @@ export interface AdminSessionUser {
 
 export const ADMIN_COOKIE_NAME = 'madamcutie_admin_session';
 
+if (!process.env.ADMIN_JWT_SECRET) {
+  console.warn(
+    '[AdminAuth] ADMIN_JWT_SECRET env var is not set. ' +
+    'Set it in your Vercel environment variables or .env.local for production use.'
+  );
+}
+
 const JWT_SECRET = new TextEncoder().encode(
-  process.env.ADMIN_JWT_SECRET ||
-    'madamcutie_couture_super_secret_jwt_key_2026_luxury_chandni_chowk'
+  process.env.ADMIN_JWT_SECRET ?? `rewoven-dev-${Math.random().toString(36)}`
 );
 
-// Standard seed accounts for verified role checking & local testing
-export const DEMO_ADMIN_USERS: (AdminSessionUser & { passwordHash: string })[] = [
-  {
-    id: 'admin-usr-01',
-    email: 'admin@madamcutie.com',
-    name: 'Madamcutie Administrator',
-    role: 'admin',
-    passwordHash: 'Madam@2026!Admin',
-  },
-  {
-    id: 'staff-usr-02',
-    email: 'associate@madamcutie.com',
-    name: 'Store Associate (Fulfillment)',
-    role: 'store_associate',
-    passwordHash: 'Madam@2026!Staff',
-  },
-];
+// Fallback demo credentials — only used when Supabase is not configured.
+// Set ADMIN_DEMO_EMAIL and ADMIN_DEMO_PASSWORD in your environment variables.
+// Do NOT hardcode credentials here.
+export const DEMO_ADMIN_USERS: (AdminSessionUser & { passwordHash: string })[] =
+  process.env.ADMIN_DEMO_EMAIL && process.env.ADMIN_DEMO_PASSWORD
+    ? [
+        {
+          id: 'admin-env-01',
+          email: process.env.ADMIN_DEMO_EMAIL,
+          name: 'Store Administrator',
+          role: 'admin' as AdminRole,
+          passwordHash: process.env.ADMIN_DEMO_PASSWORD,
+        },
+      ]
+    : [];
 
 /**
  * Sign a secure JWT session token using jose (Edge-compatible)
