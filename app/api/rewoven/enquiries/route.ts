@@ -1,7 +1,69 @@
-﻿import {db,rateLimit} from '@/lib/rewoven/server';
-import {NextResponse} from 'next/server';
-import {mkdir} from 'node:fs/promises';
-import path from 'node:path';
-import {randomUUID} from 'node:crypto';
-export const runtime='nodejs';
-export async function POST(req:Request){try{if(Number(req.headers.get('content-length')||0)>16000)return NextResponse.json({error:'Request too large'},{status:413});const origin=req.headers.get('origin');if(origin&&origin!==new URL(req.url).origin)return NextResponse.json({error:'Invalid origin'},{status:403});const body=await req.json();rateLimit('enquiry:'+String(body.email),10);if(!['contact','wholesale'].includes(body.type)||typeof body.name!=='string'||!body.name.trim()||typeof body.email!=='string'||!/^\S+@\S+\.\S+$/.test(body.email)||typeof body.phone!=='string'||!/^[+\d\s()-]{7,20}$/.test(body.phone))return NextResponse.json({error:'Please provide your name, valid email and phone number.'},{status:400});if(body.type==='wholesale'&&(!body.business||!body.city||!body.businessType||!Number.isInteger(Number(body.quantity))||Number(body.quantity)<1))return NextResponse.json({error:'Please complete the required business information.'},{status:400});const fields=['type','name','email','phone','business','city','businessType','category','quantity','gst','intent','message'];const clean=Object.fromEntries(fields.filter(k=>body[k]!==undefined).map(k=>[k,String(body[k]).slice(0,k==='message'?3000:200)]));const reference='RW-'+randomUUID().slice(0,8).toUpperCase();const dir=path.join(process.cwd(),'.rewoven-data');await mkdir(dir,{recursive:true});db().prepare('INSERT INTO enquiries(id,data,created) VALUES(?,?,?)').run(reference,JSON.stringify(clean),new Date().toISOString());return NextResponse.json({reference},{status:201})}catch{return NextResponse.json({error:'Unable to save this enquiry. Please try again.'},{status:500})}}
+﻿import { db, rateLimit } from '@/lib/rewoven/server';
+import { NextResponse } from 'next/server';
+import { validRequestOrigin } from '@/lib/rewoven/origin';
+import { randomUUID } from 'node:crypto';
+export const runtime = 'nodejs';
+export async function POST(req: Request) {
+  try {
+    if (Number(req.headers.get('content-length') || 0) > 16000)
+      return NextResponse.json({ error: 'Request too large' }, { status: 413 });
+    if (!validRequestOrigin(req))
+      return NextResponse.json({ error: 'Invalid origin' }, { status: 403 });
+    const body = await req.json();
+    rateLimit('enquiry:' + String(body.email), 10);
+    if (
+      !['contact', 'wholesale'].includes(body.type) ||
+      typeof body.name !== 'string' ||
+      !body.name.trim() ||
+      typeof body.email !== 'string' ||
+      !/^\S+@\S+\.\S+$/.test(body.email) ||
+      typeof body.phone !== 'string' ||
+      !/^[+\d\s()-]{7,20}$/.test(body.phone)
+    )
+      return NextResponse.json(
+        { error: 'Please provide your name, valid email and phone number.' },
+        { status: 400 }
+      );
+    if (
+      body.type === 'wholesale' &&
+      (!body.business ||
+        !body.city ||
+        !body.businessType ||
+        !Number.isInteger(Number(body.quantity)) ||
+        Number(body.quantity) < 1)
+    )
+      return NextResponse.json(
+        { error: 'Please complete the required business information.' },
+        { status: 400 }
+      );
+    const fields = [
+      'type',
+      'name',
+      'email',
+      'phone',
+      'business',
+      'city',
+      'businessType',
+      'category',
+      'quantity',
+      'gst',
+      'intent',
+      'message',
+    ];
+    const clean = Object.fromEntries(
+      fields
+        .filter((k) => body[k] !== undefined)
+        .map((k) => [k, String(body[k]).slice(0, k === 'message' ? 3000 : 200)])
+    );
+    const reference = 'RW-' + randomUUID().slice(0, 8).toUpperCase();
+    db()
+      .prepare('INSERT INTO enquiries(id,data,created) VALUES(?,?,?)')
+      .run(reference, JSON.stringify(clean), new Date().toISOString());
+    return NextResponse.json({ reference }, { status: 201 });
+  } catch {
+    return NextResponse.json(
+      { error: 'Unable to save this enquiry. Please try again.' },
+      { status: 500 }
+    );
+  }
+}

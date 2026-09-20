@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import {saveProduct} from '@/lib/rewoven/inventory';
+import {validRequestOrigin} from '@/lib/rewoven/origin';
 import { randomBytes, randomUUID } from 'node:crypto';
 import {
   db,
@@ -77,8 +78,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ action:
   const { action } = await params;
   try {
     releaseExpiredReservations();
-    const origin = req.headers.get('origin');
-    if (origin && origin !== new URL(req.url).origin)
+    if (!validRequestOrigin(req))
       return ok({ error: 'Invalid request origin.' }, 403);
     if (Number(req.headers.get('content-length') || 0) > 50000)
       return ok({ error: 'Request too large' }, 413);

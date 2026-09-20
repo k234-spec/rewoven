@@ -1,5 +1,16 @@
 # Rewoven setup and handover
 
+## Remaining launch steps, in order
+
+1. Choose persistent Node.js 24 hosting with a private durable disk. Vercel needs a managed-database migration first.
+2. Configure the public site URL, persistent data directory and administrator credentials. Configure the password-reset email adapter.
+3. Replace demo garments, photography, prices, measurements and stock; enter brand contact details, shipping/tax settings and approved policies.
+4. Configure Razorpay test keys and signed webhooks. Complete real merchant sandbox tests for success, failure, cancellation, duplicate notifications and delayed capture. Automated mocks do not replace these checks.
+5. Schedule reconciliation and backups, test restoration on the hosting environment, and verify browser checkout through the public HTTPS domain.
+6. Enable live payments only after a separate implementation/review: the current gateway deliberately accepts test keys only. Agree on the merchant's refund handling before accepting real payments.
+
+The application is not yet ready to accept real customer payments.
+
 ## Run locally
 
 Requires Node.js 24 (built-in SQLite), npm and writable persistent storage.
@@ -36,6 +47,8 @@ The hero's WebGL textile mesh loads separately; reduced motion and unsupported d
 
 Merge `.env.rewoven.example` into `.env.local` or your deployment environment. Keep secrets private.
 
+Set `REWOVEN_SITE_URL` to the exact public origin (scheme, hostname and port if needed). Browser form submissions validate against this origin, including behind a reverse proxy; use the matching URL when testing locally.
+
 1. Set `REWOVEN_ADMIN_EMAIL` and a unique `REWOVEN_ADMIN_PASSWORD` of at least 14 characters. The account is created on the first authentication request. Existing passwords are not overwritten by environment changes.
 2. Sign in at `/admin/login`. Set announcement, email, phone, WhatsApp digits with country code, Instagram handle and optional address.
 3. Set flat shipping in INR and an additional tax percentage explicitly. Zero is valid. This is a flat calculator, not a complete GST invoice implementation; use merchant-approved requirements.
@@ -52,13 +65,23 @@ Checkout uses server-calculated prices. Success requires signature verification 
 
 No real gateway transaction was executed: Rewoven test credentials were not supplied. Test UPI/cards, success, failure, cancellation and notification retries using your merchant account before launch. See https://razorpay.com/docs/payments/server-integration/nodejs/integration-steps/.
 
-Pending, failed and cancelled orders retain reserved stock to avoid overselling if capture arrives late. Add automated reservation expiry, reconciliation and refunds before commercial launch. Quotes whose computed totals change require a new quote. Interrupted quote payments remain visible for manual reconciliation. Live payments and automatic refunds are not enabled.
+Cancelled and failed payments release reserved stock once. Pending reservations expire after 30 minutes, swept by service requests and the reconciliation command. A late captured payment reacquires available stock; if stock is insufficient, the order becomes `PAYMENT_REVIEW`. Review these orders in admin and arrange stock or a refund manually; never ask the customer to pay again. Quotes are linked to their exact order. Quotes whose computed totals change require a new quote. Live payments and automatic refunds are not enabled.
+
+Schedule `npm.cmd run payments:reconcile` every five minutes on the application host, using the same environment and data directory as the server. Monitor nonzero exits. Admin also provides **Refresh payment status**. This command is supplied but has not been scheduled on your hosting account.
+
+Product metadata saves preserve stock. New variants begin with zero stock. Enter explicit quantities in the admin stock editor; stale edits are rejected so an intervening sale cannot be overwritten.
 
 ## Storage and deployment
 
 Data lives in `.rewoven-data/store.sqlite` with WAL journaling. `REWOVEN_DATA_DIR` can point to a persistent private directory. Never expose it through the web server. Back it up using SQLite backup facilities.
 
 Deploy as a Node.js 24 application with persistent storage on one database host. Ephemeral/serverless filesystems are unsuitable. Multiple application instances require migration to a shared database with shared rate limits and stock transactions. The inherited Prisma schema is not the Rewoven database; legacy `/api/admin/*` endpoints return 410.
+
+Production startup requires an absolute `REWOVEN_DATA_DIR` outside temporary folders. The current SQLite implementation refuses Vercel production deployment; use a persistent Node host or migrate the database before deploying there.
+
+Create a consistent backup with `npm.cmd run db:backup -- D:\Backups\rewoven-YYYY-MM-DD.sqlite`, choosing a new absolute destination each time. Keep backups outside the application checkout and copy them to protected off-host storage. To restore, stop the application and scheduled jobs, preserve the current database directory, then place the backup in a clean persistent directory as `store.sqlite` and point `REWOVEN_DATA_DIR` there. Do not mix restored data with old WAL/SHM files. Validate orders and stock before reopening checkout.
+
+For a build alongside the preview, set `$env:REWOVEN_BUILD_DIR='.next-production'` before `npm.cmd run build`. Use the same build-directory setting when starting that build. This keeps the preview's `.next` files separate.
 
 ## Assets and reference
 
@@ -73,6 +96,8 @@ Generation prompt:
 Wordmark/favicon are typography/SVG. Fonts are Playfair Display and Plus Jakarta Sans. Genuine alternate angles and garment models have not been supplied.
 
 ## Verification
+
+Run `npm.cmd test` for server, payment/inventory regression and backup tests. Run `node tests/production-api.cjs` for an isolated browser/API check of the admin stock editor, wholesale permissions, quote creation and rejection of live payment keys. It starts its own temporary server and database; install Chromium with `npx.cmd playwright install chromium` first. Gateway responses in automated payment tests are mocked, not merchant sandbox transactions.
 
 `tests/rewoven-server.test.ts` checks totals, invalid variants, combined quantities, stock limits, trade authorization, MOQ, tier pricing, password hashes, signatures, amount mismatch and notification idempotency in an isolated test database.
 
