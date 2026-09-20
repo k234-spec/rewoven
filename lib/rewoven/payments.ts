@@ -44,7 +44,8 @@ export function calculate(items:Line[],user:User|null,wholesale=false){
 
 export async function gateway(path:string,method='GET',data?:unknown){
   const key=process.env.RAZORPAY_KEY_ID,secret=process.env.RAZORPAY_KEY_SECRET;
-  if(!key?.startsWith('rzp_test_')||!secret)throw new Error('Razorpay test credentials are not configured.');
+  const isTest=key?.startsWith('rzp_test_'),isLive=process.env.RAZORPAY_LIVE_ENABLED==='true'&&key?.startsWith('rzp_live_');
+  if((!isTest&&!isLive)||!secret)throw new Error('Razorpay credentials are not configured. Use test keys (rzp_test_) or set RAZORPAY_LIVE_ENABLED=true with live keys.');
   const res=await fetch('https://api.razorpay.com/v1/'+path,{method,signal:AbortSignal.timeout(15000),
     headers:{Authorization:'Basic '+Buffer.from(key+':'+secret).toString('base64'),'Content-Type':'application/json'},
     ...(data?{body:JSON.stringify(data)}:{})});
