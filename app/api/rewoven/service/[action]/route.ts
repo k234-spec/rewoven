@@ -110,33 +110,44 @@ export async function POST(req: Request, { params }: { params: Promise<{ action:
       if (b.mode === 'Reset password') {
         const u = db().prepare('SELECT id FROM users WHERE email=?').get(email) as
           { id: string } | undefined;
-        if (!process.env.REWOVEN_MAIL_WEBHOOK)
-          return ok(
-            { error: 'Password reset email delivery is awaiting merchant configuration.' },
-            503
-          );
         if (u) {
           const token = randomBytes(32).toString('hex');
           db().prepare('DELETE FROM resets WHERE user_id=?').run(u.id);
           db()
             .prepare('INSERT INTO resets VALUES(?,?,?)')
             .run(hash(token), u.id, Date.now() + 1800000);
-          const sent = await fetch(process.env.REWOVEN_MAIL_WEBHOOK, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: 'Bearer ' + (process.env.REWOVEN_MAIL_TOKEN || ''),
-            },
-            body: JSON.stringify({
-              to: email,
-              template: 'password-reset',
-              url:
-                (process.env.REWOVEN_SITE_URL || new URL(req.url).origin) +
-                '/account?reset=' +
-                token,
-            }),
-          });
-          if (!sent.ok) throw new Error('Email delivery is unavailable. Please try again.');
+          const resetUrl =
+            (process.env.REWOVEN_SITE_URL || new URL(req.url).origin) +
+            '/account?reset=' +
+            token;
+          if (process.env.REWOVEN_MAIL_WEBHOOK) {
+            try {
+              const sent = await fetch(process.env.REWOVEN_MAIL_WEBHOOK, {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                  Authorization: 'Bearer ' + (process.env.REWOVEN_MAIL_TOKEN || ''),
+                },
+                body: JSON.stringify({
+                  to: email,
+                  template: 'password-reset',
+                  url: resetUrl,
+                }),
+              });
+              if (!sent.ok) throw new Error('Email delivery is unavailable. Please try again.');
+            } catch (err) {
+              console.error('[MailWebhook] Failed to dispatch password reset email:', err);
+              throw new Error('Email delivery is temporarily unavailable. Please try again.');
+            }
+          } else {
+            console.log(`[DevAuth] Password reset requested for ${email}: ${resetUrl}`);
+            if (process.env.NODE_ENV !== 'production') {
+              return ok({
+                message: 'Password reset link ready for testing: ' + resetUrl,
+                url: resetUrl,
+              });
+            }
+          }
         }
         return ok({
           message: 'If an account matches this email, a password reset link has been sent.',
